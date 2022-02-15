@@ -1,0 +1,14 @@
+Version: 0.0.1
+
+Id: templateModule
+Name: Template Module
+Creator: MageMage81
+Attributions: -
+
+Version Changelog:
+
+0.0.1:
+- general template for all the modules
+- contains 2 basic Model Components:
+	- 1 parted entire part
+	- 2 parted with flat area and border/edge

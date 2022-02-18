@@ -349,6 +349,7 @@ GameObject:
   - component: {fileID: 114583291854842304}
   - component: {fileID: 114282703937751956}
   - component: {fileID: 114554749858701326}
+  - component: {fileID: 114636372242996062}
   m_Layer: 0
   m_Name: main
   m_TagString: Untagged
@@ -381,7 +382,7 @@ Transform:
   m_Children:
   - {fileID: 4981515279110204}
   m_Father: {fileID: 4288729518762578}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4033475294682678
 Transform:
@@ -408,7 +409,7 @@ Transform:
   m_Children:
   - {fileID: 4493684737930262}
   m_Father: {fileID: 4288729518762578}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4288729518762578
 Transform:
@@ -420,10 +421,10 @@ Transform:
   m_LocalPosition: {x: 0.013, y: 0.015, z: -0.0142}
   m_LocalScale: {x: 0.1, y: 0.01, z: 0.1}
   m_Children:
-  - {fileID: 4747464754431368}
   - {fileID: 4024019194952668}
-  - {fileID: 4666694111973326}
   - {fileID: 4123477610895396}
+  - {fileID: 4747464754431368}
+  - {fileID: 4666694111973326}
   m_Father: {fileID: 4340241934505802}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
@@ -451,8 +452,8 @@ Transform:
   m_LocalPosition: {x: -0.038, y: 0.0153, z: 0.0652}
   m_LocalScale: {x: 0.045, y: 0.005, z: 0.02}
   m_Children:
-  - {fileID: 4605311581303960}
   - {fileID: 4430631110064358}
+  - {fileID: 4605311581303960}
   - {fileID: 4343040613284620}
   m_Father: {fileID: 4933254590802904}
   m_RootOrder: 1
@@ -464,8 +465,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1436660357492734}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.0066666957, y: 0.45999998, z: 0.008}
-  m_LocalScale: {x: 0.06666666, y: 0.15000008, z: 0.6000003}
+  m_LocalPosition: {x: -0.0066666957, y: 0.45999998, z: 0.07000007}
+  m_LocalScale: {x: 0.062222213, y: 0.1400002, z: 0.600001}
   m_Children: []
   m_Father: {fileID: 4340706258713340}
   m_RootOrder: 2
@@ -497,7 +498,7 @@ Transform:
   m_LocalScale: {x: 0.22222216, y: 2, z: 0.5}
   m_Children: []
   m_Father: {fileID: 4340706258713340}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4493684737930262
 Transform:
@@ -523,7 +524,7 @@ Transform:
   m_LocalScale: {x: 0.2222222, y: 2, z: 0.50000006}
   m_Children: []
   m_Father: {fileID: 4340706258713340}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4629308042100390
 Transform:
@@ -563,7 +564,7 @@ Transform:
   m_Children:
   - {fileID: 4650472999865732}
   m_Father: {fileID: 4288729518762578}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4747464754431368
 Transform:
@@ -577,7 +578,7 @@ Transform:
   m_Children:
   - {fileID: 4629308042100390}
   m_Father: {fileID: 4288729518762578}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4872196416278518
 Transform:
@@ -771,7 +772,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: fd8d92b585e0386448085eb363ac80c5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -907,7 +908,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: ae70199501be4a0489aae4d08456bdb9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1126,7 +1127,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1436660357492734}
-  m_Text: /
+  m_Text: "\u2194"
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -1378,8 +1379,8 @@ MonoBehaviour:
   m_Script: {fileID: -119419473, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ModuleType: simonsStates
-  ModuleDisplayName: Simon's States
+  ModuleType: simonsStatement
+  ModuleDisplayName: Simon's Statement
   RequiresTimerVisibility: 0
 --- !u!114 &114291228935190514
 MonoBehaviour:
@@ -1566,6 +1567,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Mobile/DiffuseTint
+--- !u!114 &114636372242996062
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1989428606143238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0b7378ec7fef9d449839cdd12a1e578, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audio: {fileID: 114219407848371832}
+  bomb: {fileID: 114583291854842304}
+  buttons:
+  - {fileID: 114197547027206174}
+  - {fileID: 114407301064021960}
+  - {fileID: 114075491526825552}
+  - {fileID: 114370641542994960}
+  displayLEDs:
+  - {fileID: 23888783407849972}
+  - {fileID: 23410723345062020}
+  symbol: {fileID: 102540374622522678}
+  colors:
+  - {r: 1, g: 0, b: 0, a: 0}
+  - {r: 0.28627452, g: 0.909804, b: 0.31764707, a: 0}
+  - {r: 0.28627452, g: 0.3019608, b: 0.9490197, a: 0}
+  - {r: 0.86274517, g: 0.909804, b: 0.31764707, a: 0}
 --- !u!114 &114641891833250714
 MonoBehaviour:
   m_ObjectHideFlags: 1

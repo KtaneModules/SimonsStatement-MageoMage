@@ -14,7 +14,19 @@ MonoBehaviour:
   id: simonsStatement
   title: Simon's Statement
   author: MageMage81, Seefop
-  description: 
-  version: 0.0.1
+  description: 'Module Idea by Seefop, Developed by MageMage
+
+
+    Based on a given statement and the flashing colors decide whether the statement
+    is true and then press a corresponding button.
+
+
+    V.1.0.0
+
+
+    GitHub:
+
+    https://github.com/MageoMage/SimonsStatement'
+  version: 1.0.0
   outputFolder: build
   previewImage: {fileID: 0}

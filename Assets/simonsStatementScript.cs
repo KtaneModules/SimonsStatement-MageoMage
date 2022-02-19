@@ -18,6 +18,7 @@ public class simonsStatementScript : MonoBehaviour {
 	public MeshRenderer[] displayLEDs;
 	public TextMesh symbol;
 	public Color[] colors; //RGBY
+	public Material[] clrMats;
 
     private bool colorblind;
 	private bool doSequence;
@@ -26,8 +27,10 @@ public class simonsStatementScript : MonoBehaviour {
 	private int[] solveSequence;
 	private int[] lookUpValues;
 	private bool inputReceived; // used for making sounds after first input
+	private bool activated = false; //used so that inputs are only counted once the lights are on
 	private int stage = 0;
 	private int step = 0;
+	private float waitTime = 2.5f;
 	private readonly string[] gates = {"AND", "OR", "XOR", "NAND", "NOR", "XNOR", "IMP", "IMPBY"};
 	private readonly string[] symbols = {"∧", "∨", "⊻", "|", "↓", "↔", "→", "←"};
 	private readonly string[] clrNames = {"red", "green", "blue", "yellow"};
@@ -51,52 +54,98 @@ public class simonsStatementScript : MonoBehaviour {
     void Awake(){
 		modId = moduleIdCounter++;
 
-		foreach (KMSelectable button in buttons){
-			KMSelectable temp = button;
-			button.OnInteract += delegate(){Press(temp); return false;};
+		for (int i = 0; i < 4; i++){
+			KMSelectable temp = buttons[i];
+			int help = i;
+			buttons[i].OnInteract += delegate(){Press(temp, help); return false;};
 		}
 		
 		colorblind = GetComponent<KMColorblindMode>().ColorblindModeActive;
 	}
 
-	void Press(KMSelectable button){
+	void Press(KMSelectable button, int index){
+		if (activated){
+			Debug.LogFormat("[Simon's Statement #{0}] {1} has been pressed", modId, button.name);
+			inputReceived = true;
+			//shake
+			button.AddInteractionPunch(1f);
 
-		Debug.LogFormat("[Simon's Statement #{0}] {1} has been pressed", modId, button.name);
-		inputReceived = true;
-		//turn on light
-		//TODO MAYBE: shake?
-		StopAllCoroutines();
-		foreach (KMSelectable btn in buttons) btn.GetComponent<Light>().enabled = false;
-		StartCoroutine(GlowCoroutine(button));
-		//TODO: play sound
-		//check whether correct
-		if (!modSolved && button == buttons[solveSequence[step-1]]){
-			if (step == stage){
-				Debug.LogFormat("[Simon's Statement #{0}] Stage {1} passed", modId, stage);
-				if (stage == 5){
-					GetComponent<KMBombModule>().HandlePass();
-					modSolved = true;
-					doSequence = false;
-					Debug.LogFormat("[Simon's Statement #{0}] Module solved", modId);
-				}
-				step = 0;
-				stage++;
+			//turn on light
+			StopAllCoroutines();
+			for (int i = 0; i < 4; i++){
+				buttons[i].GetComponent<Light>().enabled = false;
+				buttons[i].GetComponent<Renderer>().material = clrMats[i];
 			}
-			step++;
-		} else if (!modSolved){
-			Debug.LogFormat("[Simon's Statement #{0}] Expected {1}, module struck & reset stage.", modId, clrNames[solveSequence[step-1]]);
-			GetComponent<KMBombModule>().HandleStrike();
-			step = 1;
+			StartCoroutine(GlowCoroutine(button, index));
+
+			//play sound
+			audio.PlaySoundAtTransform(clrNames[index], button.transform);
+
+			//check whether correct
+			if (!modSolved && button == buttons[solveSequence[step-1]]){
+				waitTime = 2.5f;
+				if (step == stage){
+					Debug.LogFormat("[Simon's Statement #{0}] Stage {1} passed", modId, stage);
+					if (stage == 5){
+						GetComponent<KMBombModule>().HandlePass();
+						modSolved = true;
+						activated = false;
+						doSequence = false;
+						Debug.LogFormat("[Simon's Statement #{0}] Module solved", modId);
+						StartCoroutine(SolveAnimation());
+					}
+					step = 0;
+					stage++;
+					waitTime = 0.5f;
+				}
+				step++;
+			} else if (!modSolved){
+				Debug.LogFormat("[Simon's Statement #{0}] Expected {1}, module struck & reset stage.", modId, clrNames[solveSequence[step-1]]);
+				GetComponent<KMBombModule>().HandleStrike();
+				step = 1;
+			}
+			//TODO MAYBE: make animation?
 		}
-		//TODO MAYBE: make animation?
 	}
 
-	private IEnumerator GlowCoroutine(KMSelectable button) {
+	private IEnumerator SolveAnimation(){
+		float interval = 0.06f;
+		yield return new WaitForSeconds(0.7f);
+		//audio.PlaySoundAtTransform("win", transform);
+		buttons[0].GetComponent<Renderer>().material = clrMats[4];
+		buttons[0].GetComponent<Light>().enabled = true;
+		audio.PlaySoundAtTransform("red", transform);
+		yield return new WaitForSeconds(interval);
+		buttons[2].GetComponent<Renderer>().material = clrMats[6];
+		buttons[2].GetComponent<Light>().enabled = true;
+		audio.PlaySoundAtTransform("blue", transform);
+		yield return new WaitForSeconds(interval);
+		buttons[1].GetComponent<Renderer>().material = clrMats[5];
+		buttons[1].GetComponent<Light>().enabled = true;
+		audio.PlaySoundAtTransform("green", transform);
+		yield return new WaitForSeconds(interval);
+		buttons[3].GetComponent<Renderer>().material = clrMats[7];
+		buttons[3].GetComponent<Light>().enabled = true;
+		audio.PlaySoundAtTransform("yellow", transform);
+		yield return new WaitForSeconds(0.2f);
+		buttons[0].GetComponent<Renderer>().material = clrMats[0];
+		buttons[0].GetComponent<Light>().enabled = false;
+		buttons[1].GetComponent<Renderer>().material = clrMats[1];
+		buttons[1].GetComponent<Light>().enabled = false;
+		buttons[2].GetComponent<Renderer>().material = clrMats[2];
+		buttons[2].GetComponent<Light>().enabled = false;
+		buttons[3].GetComponent<Renderer>().material = clrMats[3];
+		buttons[3].GetComponent<Light>().enabled = false;
+	}
+
+	private IEnumerator GlowCoroutine(KMSelectable button, int index) {
 		yield return new WaitForSeconds(0.05f);
 		button.GetComponent<Light>().enabled = true;
+		button.GetComponent<Renderer>().material = clrMats[index+4];
 		yield return new WaitForSeconds(0.5f);
 		button.GetComponent<Light>().enabled = false;
-		yield return new WaitForSeconds(2.5f);
+		button.GetComponent<Renderer>().material = clrMats[index];
+		yield return new WaitForSeconds(waitTime);
 		StartCoroutine(FlashSequenceCoroutine());
 	}
 	
@@ -105,13 +154,18 @@ public class simonsStatementScript : MonoBehaviour {
 
 		while(doSequence && routinePosition < stage){
 			if (inputReceived){
-				//TODO: add sounds
-				//audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
+				//add sounds
+				audio.PlaySoundAtTransform(clrNames[Sequence[routinePosition][0]], buttons[Sequence[routinePosition][0]].transform);
+				audio.PlaySoundAtTransform(clrNames[Sequence[routinePosition][1]], buttons[Sequence[routinePosition][1]].transform);
 			}
+			buttons[Sequence[routinePosition][0]].GetComponent<Renderer>().material = clrMats[Sequence[routinePosition][0]+4];
 			buttons[Sequence[routinePosition][0]].GetComponent<Light>().enabled = true;
+			buttons[Sequence[routinePosition][1]].GetComponent<Renderer>().material = clrMats[Sequence[routinePosition][1]+4];
 			buttons[Sequence[routinePosition][1]].GetComponent<Light>().enabled = true;
 			yield return new WaitForSeconds(0.5f);
+			buttons[Sequence[routinePosition][0]].GetComponent<Renderer>().material = clrMats[Sequence[routinePosition][0]];
 			buttons[Sequence[routinePosition][0]].GetComponent<Light>().enabled = false;
+			buttons[Sequence[routinePosition][1]].GetComponent<Renderer>().material = clrMats[Sequence[routinePosition][1]];
 			buttons[Sequence[routinePosition][1]].GetComponent<Light>().enabled = false;
 			yield return new WaitForSeconds(0.2f);
 			routinePosition++;
@@ -212,7 +266,12 @@ public class simonsStatementScript : MonoBehaviour {
 				button.GetComponentInChildren<TextMesh>().color = new Color(0, 0, 0, 0);
 
 		doSequence = true;
+        GetComponent<KMBombModule>().OnActivate += Flash;
+	}
+
+	void Flash(){
 		StartCoroutine(FlashSequenceCoroutine());
+		activated = true;
 	}
 
 	private void evaluate(){

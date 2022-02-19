@@ -1,0 +1,26 @@
+Version: 1.1.0
+
+Id: templateModule
+Name: Template Module
+Creator: MageMage81
+Attributions: Seefop (Idea & Concept)
+
+Version Changelog:
+
+1.1.0:
+- added sounds
+- added changing of material for flashing
+- increased display size
+- fixed some input bugs before lights were on
+- flash sequence only starts when lights are turned on
+
+1.0.0:
+- general functionality exists
+- sounds and punches are yet to be added
+- colorblind mode already implement
+
+0.0.1:
+- general template for all the modules
+- contains 2 basic Model Components:
+	- 1 parted entire part
+	- 2 parted with flat area and border/edge

@@ -28,6 +28,7 @@ public class simonsStatementScript : MonoBehaviour {
 	private int[] lookUpValues;
 	private bool inputReceived; // used for making sounds after first input
 	private bool activated = false; //used so that inputs are only counted once the lights are on
+	private int maxStage = 3;
 	private int stage = 0;
 	private int step = 0;
 	private float waitTime = 2.5f;
@@ -86,7 +87,7 @@ public class simonsStatementScript : MonoBehaviour {
 				waitTime = 2.5f;
 				if (step == stage){
 					Debug.LogFormat("[Simon's Statement #{0}] Stage {1} passed", modId, stage);
-					if (stage == 5){
+					if (stage == maxStage){
 						GetComponent<KMBombModule>().HandlePass();
 						modSolved = true;
 						activated = false;
@@ -176,6 +177,9 @@ public class simonsStatementScript : MonoBehaviour {
 	}
 
 	void Start () {
+		maxStage = UnityEngine.Random.Range(3,6); //random number for max stages
+		Debug.LogFormat("[Simon's Statement #{0}] Generating {1} stages.", modId, maxStage);
+
 		gate = UnityEngine.Random.Range(0,8);
 		symbol.text = symbols[gate];
 
@@ -191,8 +195,8 @@ public class simonsStatementScript : MonoBehaviour {
 		stage = 1;
 		step = 1;
 
-		Sequence = new int[5][];
-		for(int i = 0; i < 5; i++){
+		Sequence = new int[maxStage][];
+		for(int i = 0; i < maxStage; i++){
 			Sequence[i] = new int[2];
 			int h1 = UnityEngine.Random.Range(0,4);
 			int h2 = UnityEngine.Random.Range(0,3);
@@ -203,7 +207,7 @@ public class simonsStatementScript : MonoBehaviour {
 		}
 
 		string temp = clrNames[Sequence[0][0]] + " & " + clrNames[Sequence[0][1]];
-		for(int i = 1; i < 5; i++)
+		for(int i = 1; i < maxStage; i++)
 			temp += ", " + clrNames[Sequence[i][0]] + " & " + clrNames[Sequence[i][1]];
 
 		Debug.LogFormat("[Simon's Statement #{0}] The entire flashing sequence is: {1}", modId, temp);
@@ -211,7 +215,7 @@ public class simonsStatementScript : MonoBehaviour {
 		//evaluates the expression
 		evaluate();
 		temp = "" + truthSequence[0];
-		for(int i = 1; i < 5; i++)
+		for(int i = 1; i < maxStage; i++)
 			temp += ", " + truthSequence[i];
 		
 		Debug.LogFormat("[Simon's Statement #{0}] This results in this sequence of truth values: {1}", modId, temp);
@@ -230,9 +234,9 @@ public class simonsStatementScript : MonoBehaviour {
 		baseValue -= bomb.CountDuplicatePorts() * 4;
 		baseValue += bomb.GetBatteryCount() * bomb.GetPortCount();
 
-		lookUpValues = new int[5];
+		lookUpValues = new int[maxStage];
 
-		for (int i = 0; i < 5; i++){
+		for (int i = 0; i < maxStage; i++){
 			int help = baseValue * (i+1);
 			while (help < 0)
 				help += 25;
@@ -243,17 +247,17 @@ public class simonsStatementScript : MonoBehaviour {
 		}
 		
 		temp = "" + lookUpValues[0];
-		for(int i = 1; i < 5; i++)
+		for(int i = 1; i < maxStage; i++)
 			temp += ", " + lookUpValues[i];
 
 		Debug.LogFormat("[Simon's Statement #{0}] With a base value of {1} this creates look up values for the tables as follows: {2}", modId, baseValue, temp);
 
-		solveSequence = new int[5];
-		for (int i = 0; i < 5; i++)
+		solveSequence = new int[maxStage];
+		for (int i = 0; i < maxStage; i++)
 			solveSequence[i] = truthSequence[i] ? TableA[lookUpValues[i]] : TableB[lookUpValues[i]];
 		
 		temp = "" + clrNames[solveSequence[0]];
-		for(int i = 1; i < 5; i++)
+		for(int i = 1; i < maxStage; i++)
 			temp += ", " + clrNames[solveSequence[i]];
 
 		Debug.LogFormat("[Simon's Statement #{0}] The entire solve sequence is going to be: {1}", modId, temp);
@@ -275,10 +279,10 @@ public class simonsStatementScript : MonoBehaviour {
 	}
 
 	private void evaluate(){
-		truthSequence = new bool[5];
+		truthSequence = new bool[maxStage];
 		bool[] values = new bool[4];
 
-		for (int i = 0; i < 5; i++){
+		for (int i = 0; i < maxStage; i++){
 			for (int j = 0; j < 4; j++) values[j] = false;
 			values[Sequence[i][0]] = true;
 			values[Sequence[i][1]] = true;

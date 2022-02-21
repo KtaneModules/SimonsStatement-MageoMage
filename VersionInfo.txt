@@ -1,4 +1,4 @@
-Version: 1.1.2
+Version: 1.1.3
 
 Id: templateModule
 Name: Template Module
@@ -6,6 +6,10 @@ Creator: MageMage81
 Attributions: Seefop (Idea & Concept)
 
 Version Changelog:
+
+1.1.3:
+- added colorblind text for the display (like the only important part, how did I miss that)
+- grammar issues in the manual
 
 1.1.2:
 - now generates 3 to 5 stages instead of set 5

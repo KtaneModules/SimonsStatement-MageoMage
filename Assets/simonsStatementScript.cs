@@ -187,8 +187,16 @@ public class simonsStatementScript : MonoBehaviour {
 		clr2 = UnityEngine.Random.Range(0,3);
 		clr2 += clr1 <= clr2 ? 1 : 0;
 
+		/*
+		to my knowledge there are three ways to get this letter:
+		1. Just make a new array/string and index into that
+		2. Take the first letter of the buttons names
+		3. do this and just take the color names and shift the first character down by 32
+		*/
 		displayLEDs[0].material.color = colors[clr1];
+		displayLEDs[0].GetComponentInChildren<TextMesh>().text = Char.ToString((char)(clrNames[clr1][0] - (char)32));
 		displayLEDs[1].material.color = colors[clr2];
+		displayLEDs[1].GetComponentInChildren<TextMesh>().text = Char.ToString((char)(clrNames[clr2][0] - (char)32));
 
 		Debug.LogFormat("[Simon's Statement #{0}] The expression is: {1} {2} {3}", modId, clrNames[clr1], gates[gate], clrNames[clr2]);
 
@@ -262,12 +270,17 @@ public class simonsStatementScript : MonoBehaviour {
 
 		Debug.LogFormat("[Simon's Statement #{0}] The entire solve sequence is going to be: {1}", modId, temp);
 
-		if (colorblind)
+		if (colorblind){
 			foreach (KMSelectable button in buttons)
 				button.GetComponentInChildren<TextMesh>().color = new Color(0, 0, 0, 255);
-		else
+			foreach (MeshRenderer display in displayLEDs)
+				display.GetComponentInChildren<TextMesh>().color = new Color(0, 0, 0, 255);
+		}else{
 			foreach (KMSelectable button in buttons)
 				button.GetComponentInChildren<TextMesh>().color = new Color(0, 0, 0, 0);
+			foreach (MeshRenderer display in displayLEDs)
+				display.GetComponentInChildren<TextMesh>().color = new Color(0, 0, 0, 0);
+		}
 
 		doSequence = true;
         GetComponent<KMBombModule>().OnActivate += Flash;

@@ -328,4 +328,44 @@ public class simonsStatementScript : MonoBehaviour {
 		}
 	}
 
+
+    // Written by Quinn Wuest
+#pragma warning disable 0414
+    private readonly string TwitchHelpMessage = "!{0} press r y g b [Presses red, yellow, green, blue buttons.] | 'press' is optional.";
+#pragma warning restore 0414
+
+    private IEnumerator ProcessTwitchCommand(string command)
+    {
+        command = command.ToLowerInvariant();
+        if (command.StartsWith("press "))
+            command = command.Substring(6);
+        if (command.StartsWith("submit "))
+            command = command.Substring(7);
+        var list = new List<KMSelectable>();
+        var str = "rgby ".ToCharArray();
+        for (int i = 0; i < command.Length; i++)
+        {
+            int ix = Array.IndexOf(str, command[i]);
+            if (ix == 4)
+                continue;
+            if (ix == -1)
+                yield break;
+            list.Add(buttons[ix]);
+        }
+        yield return null;
+        foreach (var b in list)
+        {
+            b.OnInteract();
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
+
+    private IEnumerator TwitchHandleForcedSolve()
+    {
+        while (!modSolved)
+        {
+            buttons[solveSequence[step - 1]].OnInteract();
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
 }

@@ -1,11 +1,14 @@
-Version: 1.1.3
+Version: 1.2.0
 
-Id: templateModule
-Name: Template Module
+Id: simonsStatement
+Name: Simon's Statement
 Creator: MageMage81
-Attributions: Seefop (Idea & Concept)
+Attributions: Seefop (Idea & Concept), Quinn Wuest (TP support)
 
 Version Changelog:
+
+1.2.0:
+- added Twitch Plays Support (Quinn Wuest)
 
 1.1.3:
 - added colorblind text for the display (like the only important part, how did I miss that)

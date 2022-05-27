@@ -177,6 +177,11 @@ public class simonsStatementScript : MonoBehaviour {
 	}
 
 	void Start () {
+		//set the scale of the lights to account for bomb size
+		float scalar = transform.lossyScale.x;
+		for (var i = 0; i < buttons.Length; i++)
+			buttons[i].gameObject.GetComponent<Light>().range *= scalar;
+
 		maxStage = UnityEngine.Random.Range(3,6); //random number for max stages
 		Debug.LogFormat("[Simon's Statement #{0}] Generating {1} stages.", modId, maxStage);
 
@@ -270,20 +275,28 @@ public class simonsStatementScript : MonoBehaviour {
 
 		Debug.LogFormat("[Simon's Statement #{0}] The entire solve sequence is going to be: {1}", modId, temp);
 
-		if (colorblind){
+		SetColorblind();
+
+		doSequence = true;
+        GetComponent<KMBombModule>().OnActivate += Flash;
+	}
+
+	void SetColorblind()
+    {
+		if (colorblind)
+		{
 			foreach (KMSelectable button in buttons)
 				button.GetComponentInChildren<TextMesh>().color = new Color(0, 0, 0, 255);
 			foreach (MeshRenderer display in displayLEDs)
 				display.GetComponentInChildren<TextMesh>().color = new Color(0, 0, 0, 255);
-		}else{
+		}
+		else
+		{
 			foreach (KMSelectable button in buttons)
 				button.GetComponentInChildren<TextMesh>().color = new Color(0, 0, 0, 0);
 			foreach (MeshRenderer display in displayLEDs)
 				display.GetComponentInChildren<TextMesh>().color = new Color(0, 0, 0, 0);
 		}
-
-		doSequence = true;
-        GetComponent<KMBombModule>().OnActivate += Flash;
 	}
 
 	void Flash(){
@@ -331,12 +344,19 @@ public class simonsStatementScript : MonoBehaviour {
 
     // Written by Quinn Wuest
 #pragma warning disable 0414
-    private readonly string TwitchHelpMessage = "!{0} press r y g b [Presses red, yellow, green, blue buttons.] | 'press' is optional.";
+    private readonly string TwitchHelpMessage = "!{0} press r y g b [Presses red, yellow, green, blue buttons.] | 'press' is optional. | !{0} colorblind";
 #pragma warning restore 0414
 
     private IEnumerator ProcessTwitchCommand(string command)
     {
         command = command.ToLowerInvariant();
+		if (command.EqualsAny("colorblind", "colourblind"))
+        {
+			yield return null;
+			colorblind = !colorblind;
+			SetColorblind();
+			yield break;
+        }
         if (command.StartsWith("press "))
             command = command.Substring(6);
         if (command.StartsWith("submit "))

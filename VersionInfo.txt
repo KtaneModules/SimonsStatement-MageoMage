@@ -1,11 +1,18 @@
-Version: 1.2.0
+Version: 1.2.1
 
 Id: simonsStatement
 Name: Simon's Statement
 Creator: MageMage81
-Attributions: Seefop (Idea & Concept), Quinn Wuest (TP support)
+Attributions: Seefop (Idea & Concept), Quinn Wuest (TP support), eXish (further improvements)
 
 Version Changelog:
+
+1.2.1: (changes from eXish)
+- colorblind command for TP
+- controller support
+- light scaling problem fixed
+- slight manual update
+
 
 1.2.0:
 - added Twitch Plays Support (Quinn Wuest)
